@@ -35,7 +35,7 @@ mongoose.connect(connectionString, (err) => {
         throw err;
     }
     console.log("database is connected");
-    const apiPort = process.env.API_PORT || 5000;
+    const apiPort = process.env.PORT || 5000;
     app.listen(apiPort, () => {
         console.log(`Server running on port ${apiPort}`);
     });
