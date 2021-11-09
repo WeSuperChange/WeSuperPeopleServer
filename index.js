@@ -26,10 +26,7 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>');
 })
 
-
-const connectionString = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CLUS}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
-// const connectionString = process.env
-mongoose.connect(connectionString, (err) => {
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CLUS}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`, (err) => {
     if (err) {
         console.log(err);
         throw err;
