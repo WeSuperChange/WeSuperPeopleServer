@@ -65,4 +65,3 @@ const pollCollectionSchema = new Schema(
 const Polls = mongoose.model('Polls', pollCollectionSchema);
 
 module.exports = Polls;
-
