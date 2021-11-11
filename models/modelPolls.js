@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 
 // Enkelkinder
-const pollAnswerSchema = new Schema(
+const pollAnswerSchema = new mongoose.Schema(
     {
         "AnswerText": {
             type: String,
@@ -22,7 +22,7 @@ const pollAnswerSchema = new Schema(
 );
 
 // Kinder
-const pollSchema = new Schema(
+const pollSchema = new mongoose.Schema(
     {
         id: {
             type: String,
@@ -37,7 +37,10 @@ const pollSchema = new Schema(
             type: String,
             required: true
         },
-        PollAnswers: [{ pollAnswerSchema, required }],
+        PollAnswers: [{
+            type: pollAnswerSchema,
+            required: true
+        }],
         nextPollId: {
             type: String,
             required: false
@@ -46,7 +49,7 @@ const pollSchema = new Schema(
 );
 
 // Eltern
-const pollCollectionSchema = new Schema(
+const pollCollectionSchema = new mongoose.Schema(
     {
         Owner: {
             UID: {
@@ -56,12 +59,13 @@ const pollCollectionSchema = new Schema(
         },
         // Array of subdocuments
         Polls: [pollSchema],
+
         // Single nested subdocuments. Caveat: single nested subdocs only work
         // in mongoose >= 4.2.0
         Poll: pollSchema
     }, { timestamps: true }
 );
 
-const Polls = mongoose.model('Polls', pollCollectionSchema);
+const Poll = mongoose.model('Polls', pollCollectionSchema);
 
-module.exports = Polls;
+module.exports = Poll;
