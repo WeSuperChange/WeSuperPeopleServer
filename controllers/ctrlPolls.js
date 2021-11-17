@@ -27,12 +27,25 @@ const createPoll = (req, res) => {
             .json({ success: false, error: 'You must provide a poll' });
     }
 
-    const Poll = new PollGroup(body);
-    if (!Poll) {
-        return res
-            .status(400)
-            .json({ success: false, error: err });
+    // format a single poll to match the poll model
+    const singlePoll = {
+        PollCategory: body.Category,
+        PollQuestion: question,
+        PollAnswers: [...newPollAnswers]
     }
+
+    // build a pollgroup object
+    const pollGroup = {
+        UID: body.newPollUser,
+        Polls: [singlePoll]
+    };
+
+    const Poll = new PollGroup(pollGroup);
+    // if (!Poll) {
+    //     return res
+    //         .status(400)
+    //         .json({ success: false, error: err });
+    // }
 
     Poll
         .save()
@@ -64,10 +77,10 @@ const updatePoll = async (req, res) => {
     if (!body) {
         return res
             .status(404)
-            .json({ success: false, error: 'You must provide a body to update' });
+            .json({ success: false, error: 'You must provide some data for update' });
     }
 
-    PollGroup.findOne({ _id: req.params.id }, (err, Poll) => {
+    PollGroup.findOne({ id: req.params.id }, (err, pollGroup) => {
 
         if (err) {
             return res
@@ -75,17 +88,18 @@ const updatePoll = async (req, res) => {
                 .json({ err, message: 'Poll not found!' });
         }
 
+
         // Poll.location = body.location;
         // Poll.activity = body.activity;
         // Poll.image_url = body.image_url;
         // Poll.description = body.description;
 
-        Pollg
+        pollGroup
             .save()
             .then(() => {
                 return res
                     .status(200)
-                    .json({ success: true, id: Poll._id, message: 'Poll updated!' });
+                    .json({ success: true, id: pollGroup._id, message: 'Poll updated!' });
             })
             .catch(error => {
                 return res
@@ -121,7 +135,7 @@ const deletePoll = async (req, res) => {
 
         return res
             .status(200)
-            .json({ success: true, data: Poll });
+            .json({ success: true, message: 'Poll deleted!' });
 
     }).catch(err => console.log(err));
 }
