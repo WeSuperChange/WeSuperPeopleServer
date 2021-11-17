@@ -3,7 +3,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
 
 
@@ -14,7 +13,7 @@ const routesUsers = require('./routes/routesUsers');
 
 
 //============================================================================
-// configure access to  environment variables
+// configure access to environment variables
 dotenv.config();
 
 

@@ -66,6 +66,6 @@ const pollCollectionSchema = new mongoose.Schema(
     }, { timestamps: true }
 );
 
-const Poll = mongoose.model('Polls', pollCollectionSchema);
+const PollGroup = mongoose.model('Polls', pollCollectionSchema);
 
-module.exports = Poll;
+module.exports = PollGroup;

@@ -13,14 +13,14 @@ const userSchema = new mongoose.Schema(
             default: false,
             required: true
         },
-        isOnline: {
-            type: Boolean,
-            default: false,
-            required: true
-        },
+        //     isOnline: {
+        //         type: Boolean,
+        //         default: false,
+        //         required: true
+        //     },
     }, { timestamps: true }
 );
 
-const User = mongoose.model('Users', userSchema);
+const User = mongoose.model('users', userSchema);
 
 module.exports = User;

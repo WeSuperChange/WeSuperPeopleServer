@@ -6,11 +6,11 @@ const ctrl = require('../controllers/ctrlUsers');
 
 
 //============================================================================
-// the routes
+// the routes (CRUD => create, read , update, delete)
 router.post('/user', ctrl.createUser);
+router.get('/user/:id', ctrl.getUserById);
 router.put('/user/:id', ctrl.updateUser);
 router.delete('/user/:id', ctrl.deleteUser);
-router.get('/user/:id', ctrl.getUserById);
 
 
 //============================================================================
