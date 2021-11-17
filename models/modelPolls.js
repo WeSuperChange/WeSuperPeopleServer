@@ -51,11 +51,10 @@ const pollSchema = new mongoose.Schema(
 // Eltern
 const pollCollectionSchema = new mongoose.Schema(
     {
-        Owner: {
-            UID: {
-                type: String,
-                required: true
-            }
+        // owner id (google id)
+        UID: {
+            type: String,
+            required: true
         },
         // Array of subdocuments
         Polls: [pollSchema],
