@@ -5,6 +5,9 @@
 //============================================================================
 // required modules
 const PollGroup = require('../models/modelPolls');
+
+const { v4: uuidv4 } = require('uuid');
+
 const { userIsAuthorized, userIsRegistered } = require('../modules/helpers');
 
 
@@ -13,8 +16,6 @@ const { userIsAuthorized, userIsRegistered } = require('../modules/helpers');
 
 // create a new poll
 const createPoll = (req, res) => {
-
-    console.log("function createPoll()");
 
     const body = req.body;
 
@@ -29,15 +30,22 @@ const createPoll = (req, res) => {
             .status(403)
             .json({ success: false, error: 'You are not authorized!' });
     }
-    console.log("after userIsAuthorized()");
+
+    // create answer objects from answer texts
+    const pollAnswers = [];
+    body.newPollAnswers.forEach(answer => {
+        pollAnswers.push({
+            "AnswerText": answer,
+            "AnswerCount": 0
+        });
+    });
 
     // format a single poll to match the poll model
     const singlePoll = {
-        PollCategory: body.newPollCategory,
-        PollQuestion: body.newPollquestion,
-        PollAnswers: body.newPollAnswers
+        Category: body.newPollCategory,
+        Question: body.newPollQuestion,
+        PollAnswers: [...pollAnswers]
     }
-    console.log(" singlepoll: ", singlePoll)
 
     // build a pollgroup object
     const pollGroup = {
@@ -45,23 +53,17 @@ const createPoll = (req, res) => {
         Polls: [singlePoll]
     };
 
-    console.log(pollGroup);
-
     const poll = new PollGroup(pollGroup);
-    // if (!poll) {
-    //     return res
-    //         .status(400)
-    //         .json({ success: false, error: err });
-    // }
-
     poll
         .save()
         .then(() => {
+            console.log("Poll created");
             return res
                 .status(201)
                 .json({ success: true, id: PollGroup._id, message: 'Poll created!' });
         })
         .catch(error => {
+            console.log(error);
             return res
                 .status(400)
                 .json({ error, message: 'Poll not created!' });

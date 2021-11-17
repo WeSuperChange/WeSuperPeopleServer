@@ -27,13 +27,13 @@ const pollSchema = new mongoose.Schema(
         id: {
             type: String,
             default: uuidv4(),
-            required: true
+            required: false
         },
         Category: {
             type: String,
             required: true
         },
-        PollQuestion: {
+        Question: {
             type: String,
             required: true
         },
@@ -61,7 +61,7 @@ const pollCollectionSchema = new mongoose.Schema(
 
         // Single nested subdocuments. Caveat: single nested subdocs only work
         // in mongoose >= 4.2.0
-        Poll: pollSchema
+        // Poll: pollSchema
     }, { timestamps: true }
 );
 
