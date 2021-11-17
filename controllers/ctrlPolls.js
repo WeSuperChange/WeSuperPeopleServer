@@ -178,7 +178,7 @@ const getPollById = async (req, res) => {
         if (!Poll) {
             return res
                 .status(404)
-                .json({ error, message: 'Poll not updated!' });
+                .json({ error, message: 'Poll not found!' });
         }
 
         return res
@@ -190,10 +190,75 @@ const getPollById = async (req, res) => {
 
 
 //============================================================================
-// get a single poll by database id (pollModel._id)
+// get a single random poll
 const getRandomPoll = async (req, res) => {
 
-    await PollGroup.aggregate([{ $sample: { size: 1 } }], (err, Poll) => {
+    // await PollGroup.aggregate([{ $sample: { size: 1 } }], (err, Poll) => {
+
+    //     if (err) {
+    //         return res
+    //             .status(400)
+    //             .json({ success: false, error: err });
+    //     }
+
+    //     if (!Poll) {
+    //         return res
+    //             .status(404)
+    //             .json({ error, message: 'No polls found!' });
+    //     }
+
+    //     return res
+    //         .status(200)
+    //         .json({ success: true, data: Poll });
+
+    // }).catch(err => console.log(err));
+
+
+    PollGroup.count().exec((err, count) => {
+
+        // Get a random entry
+        var random = Math.floor(Math.random() * count)
+
+        // // Again query all users but only fetch one offset by our random #
+        // PollGroup.findOne().skip(random).exec(
+        //     function (err, result) {
+        //         // Tada! random user
+        //         console.log(result)
+        //     })
+
+        PollGroup.findOne().skip(random).exec((err, Poll) => {
+
+            if (err) {
+                return res
+                    .status(400)
+                    .json({ success: false, error: err });
+            }
+
+            if (!Poll) {
+                return res
+                    .status(404)
+                    .json({ error, message: 'Poll not found!' });
+            }
+
+            return res
+                .status(200)
+                .json({ success: true, data: Poll });
+
+        }).catch(err => console.log(err));
+    });
+}
+
+
+//============================================================================
+// get a single single poll of a given category
+const getRandomPollByCategory = async (req, res) => {
+
+    const aggregate = [
+        { '$match': { 'Polls.Category': 'Klima' } },
+        { '$sample': { 'size': 1 } }
+    ];
+
+    await PollGroup.aggregate(aggregate, (err, Poll) => {
 
         if (err) {
             return res
@@ -204,7 +269,7 @@ const getRandomPoll = async (req, res) => {
         if (!Poll) {
             return res
                 .status(404)
-                .json({ error, message: 'Poll not updated!' });
+                .json({ error, message: 'No polls found!' });
         }
 
         return res
@@ -338,6 +403,7 @@ module.exports = {
     deletePoll,
     getPollById,
     getRandomPoll,
+    getRandomPollByCategory,
     updateResults,
     getPolls,
     getPollsByUID,
