@@ -15,6 +15,7 @@ const ctrl = require('../controllers/ctrlPolls');
 // the routes (CRUD => create, read , update, delete)
 router.post('/poll', ctrl.createPoll);
 router.get('/poll/:id', ctrl.getPollById);
+router.get('/poll/rnd', ctrl.getRandomPoll);
 router.put('/poll/:uid/:id', ctrl.updatePoll);
 router.put('/poll/res/:id/:idx', ctrl.updateResults);
 router.delete('/poll/:uid/:id', ctrl.deletePoll);
