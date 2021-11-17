@@ -5,7 +5,7 @@
 //============================================================================
 // required modules
 const PollGroup = require('../models/modelPolls');
-const { userIsAuthorized } = require('../modules/helpers');
+const { userIsAuthorized, userIsRegistered } = require('../modules/helpers');
 
 
 //============================================================================
@@ -24,8 +24,7 @@ const createPoll = (req, res) => {
             .json({ success: false, error: 'You must provide a poll' });
     }
 
-    console.log("before userIsAuthorized()");
-    if (!userIsAuthorized(body.newPollUser)) {
+    if (!userIsRegistered(body.newPollUser)) {
         return res
             .status(403)
             .json({ success: false, error: 'You are not authorized!' });
@@ -36,8 +35,9 @@ const createPoll = (req, res) => {
     const singlePoll = {
         PollCategory: body.newPollCategory,
         PollQuestion: body.newPollquestion,
-        PollAnswers: [...(body.newPollAnswers)]
+        PollAnswers: body.newPollAnswers
     }
+    console.log(" singlepoll: ", singlePoll)
 
     // build a pollgroup object
     const pollGroup = {
