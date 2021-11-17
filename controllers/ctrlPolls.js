@@ -24,17 +24,19 @@ const createPoll = (req, res) => {
             .json({ success: false, error: 'You must provide a poll' });
     }
 
+    console.log("before userIsAuthorized()");
     if (!userIsAuthorized(body.newPollUser)) {
         return res
             .status(403)
             .json({ success: false, error: 'You are not authorized!' });
     }
+    console.log("after userIsAuthorized()");
 
     // format a single poll to match the poll model
     const singlePoll = {
-        PollCategory: body.Category,
-        PollQuestion: question,
-        PollAnswers: [...newPollAnswers]
+        PollCategory: body.newPollCategory,
+        PollQuestion: body.newPollquestion,
+        PollAnswers: [...(body.newPollAnswers)]
     }
 
     // build a pollgroup object
@@ -43,16 +45,16 @@ const createPoll = (req, res) => {
         Polls: [singlePoll]
     };
 
+    console.log(pollGroup);
+
     const poll = new PollGroup(pollGroup);
-    // if (!Poll) {
+    // if (!poll) {
     //     return res
     //         .status(400)
     //         .json({ success: false, error: err });
     // }
 
-
-
-    Poll
+    poll
         .save()
         .then(() => {
             return res
