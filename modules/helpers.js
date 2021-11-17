@@ -12,17 +12,17 @@ const Poll = require('../models/modelPolls');
 // local function to get user data
 const getUserData = (uid) => {
 
-    User.findOne({ _id: uid }, (err, User) => {
+    User.findOne({ UID: uid }, (err, user) => {
 
         if (err) {
             return null;
         }
 
-        if (!User) {
+        if (!user) {
             return null;
         }
 
-        return User;
+        return user;
     });
 };
 
@@ -51,17 +51,18 @@ const userIsRegistered = (uid) => {
 // check if user is authorized to modify/delete the poll
 const userIsAuthorized = (uid, pollID) => {
 
-    Poll.findOne({ _id: pollID }, (err, Poll) => {
+    // TODO: build a query to find the requested poll
+    Poll.findOne({ id: pollID }, (err, poll) => {
 
         if (err) {
             return false;
         }
 
-        if (!Poll) {
+        if (!poll) {
             return false;
         }
 
-        return (Poll.owner === uid) || userIsAdmin(uid);
+        return (poll.owner === uid) || userIsAdmin(uid);
 
     });
 }

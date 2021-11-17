@@ -119,6 +119,7 @@ const deletePoll = async (req, res) => {
             .json({ success: false, error: 'You are not authorized!' });
     }
 
+    //  TODO: create an aggregated query to select the right poll to delete
     await PollGroup.findOneAndDelete({ _id: req.params.id }, (err, Poll) => {
 
         if (err) {
