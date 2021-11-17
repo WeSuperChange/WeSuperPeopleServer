@@ -22,6 +22,8 @@ const getUserData = (uid) => {
             return null;
         }
 
+        console.log(user)
+
         return user;
     });
 };

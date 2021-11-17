@@ -14,17 +14,20 @@ const { userIsAuthorized } = require('../modules/helpers');
 // create a new poll
 const createPoll = (req, res) => {
 
-    if (!userIsAuthorized(req.params.uid)) {
-        return res
-            .status(403)
-            .json({ success: false, error: 'You are not authorized!' });
-    }
+    console.log("function createPoll()");
 
-    const body = req.body
+    const body = req.body;
+
     if (!body) {
         return res
             .status(400)
             .json({ success: false, error: 'You must provide a poll' });
+    }
+
+    if (!userIsAuthorized(body.newPollUser)) {
+        return res
+            .status(403)
+            .json({ success: false, error: 'You are not authorized!' });
     }
 
     // format a single poll to match the poll model
@@ -40,12 +43,14 @@ const createPoll = (req, res) => {
         Polls: [singlePoll]
     };
 
-    const Poll = new PollGroup(pollGroup);
+    const poll = new PollGroup(pollGroup);
     // if (!Poll) {
     //     return res
     //         .status(400)
     //         .json({ success: false, error: err });
     // }
+
+
 
     Poll
         .save()
@@ -65,6 +70,9 @@ const createPoll = (req, res) => {
 //============================================================================
 // update a poll 
 const updatePoll = async (req, res) => {
+
+    console.log("function updatePoll()");
+
 
     if (!userIsAuthorized(req.params.uid, req.params.id)) {
         return res
@@ -145,7 +153,7 @@ const deletePoll = async (req, res) => {
 // get a single poll by database id (pollModel._id)
 const getPollById = async (req, res) => {
 
-    await PollGroup.findOne({ _id: req.params.id }, (err, Poll) => {
+    await PollGroup.findOne({ id: req.params.id }, (err, Poll) => {
 
         if (err) {
             return res
