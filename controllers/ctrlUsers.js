@@ -8,9 +8,12 @@ const User = require('../models/modelUsers');
 
 
 //============================================================================
-// controller functions for the routes
+// controller functions for the user routes
 
+
+//============================================================================
 // create a new user
+// router.post('/user', ctrl.createUser);
 const createUser = (req, res) => {
 
     const body = req.body;
@@ -45,6 +48,7 @@ const createUser = (req, res) => {
 
 //============================================================================
 // update a user 
+// router.put('/user/:id', ctrl.updateUser);
 const updateUser = (req, res) => {
     const body = req.body;
 
@@ -85,6 +89,7 @@ const updateUser = (req, res) => {
 
 //============================================================================
 // delete a user
+// router.delete('/user/:id', ctrl.deleteUser);
 const deleteUser = async (req, res) => {
 
     await User.findOneAndDelete(
@@ -111,6 +116,7 @@ const deleteUser = async (req, res) => {
 
 //============================================================================
 // get a user by database id (userModel._id)
+// router.get('/user/:id', ctrl.getUserById);
 const getUserById = async (req, res) => {
     await User.findOne(
         { _id: req.params.id }, (err, user) => {

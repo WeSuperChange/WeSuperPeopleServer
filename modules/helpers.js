@@ -22,8 +22,6 @@ const getUserData = (uid) => {
             return null;
         }
 
-        // console.log(user)
-
         return user;
     });
 };
@@ -54,7 +52,7 @@ const userIsRegistered = (uid) => {
 const userIsAuthorized = (uid, pollID) => {
 
     // TODO: build a query to find the requested poll
-    Poll.findOne({ id: pollID }, (err, poll) => {
+    Poll.findOne({ "Polls.id": pollID }, (err, poll) => {
 
         if (err) {
             return false;
@@ -69,11 +67,10 @@ const userIsAuthorized = (uid, pollID) => {
     });
 }
 
-
 //============================================================================
 // export all functions
 module.exports = {
     userIsRegistered,
     userIsAuthorized,
-    userIsAdmin,
+    userIsAdmin
 }

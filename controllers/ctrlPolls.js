@@ -9,7 +9,7 @@ const { userIsAuthorized, userIsRegistered } = require('../modules/helpers');
 
 
 //============================================================================
-// controller functions for the routes
+// controller functions for the poll routes
 
 
 //============================================================================
@@ -36,7 +36,7 @@ const createPoll = (req, res) => {
     }
 
 
-    // because the frontend has no knowledge about the poll data model, we have to build is by oursevles
+    // because the frontend has no knowledge about the poll data model, we need to build is by oursevles
 
     // create answer objects from answer texts
     const pollAnswers = [];
@@ -141,7 +141,7 @@ const deletePoll = async (req, res) => {
     }
 
     //  TODO: create an aggregated query to select the right poll to delete
-    await PollGroup.findOneAndDelete({ _id: req.params.id }, (err, Poll) => {
+    await PollGroup.findOneAndDelete({ id: req.params.id }, (err, Poll) => {
 
         if (err) {
             return res
@@ -254,7 +254,7 @@ const getRandomPoll = async (req, res) => {
 const getRandomPollByCategory = async (req, res) => {
 
     const aggregate = [
-        { '$match': { 'Polls.Category': 'Klima' } },
+        { '$match': { 'Polls.Category': req.params.cat } },
         { '$sample': { 'size': 1 } }
     ];
 
@@ -282,7 +282,7 @@ const getRandomPollByCategory = async (req, res) => {
 
 //============================================================================
 // update results by poll id 
-//router.put('/poll/res/:id/:idx', ctrl.updateResults);
+//router.put('/poll/res/:id/:idx/:ans', ctrl.updateResults);
 const updateResults = async (req, res) => {
 
     // const body = req.body;
@@ -293,7 +293,7 @@ const updateResults = async (req, res) => {
     //         .json({ success: false, error: 'You must provide a body to update' });
     // }
 
-    await PollGroup.findOne({ id: req.params.id }, (err, PollGroup) => {
+    await PollGroup.findOne({ "Polls.id": req.params.id }, (err, PollGroup) => {
 
         if (err) {
             return res
@@ -302,27 +302,27 @@ const updateResults = async (req, res) => {
         }
 
         // set the answer
-        PollGroup.Polls[req.params.idx] =
+        PollGroup.Polls[req.params.idx].AnswerCount++;
 
-            PollGroup
-                .save()
-                .then(() => {
-                    return res
-                        .status(200)
-                        .json({ success: true, id: Poll._id, message: 'Poll updated!' });
-                })
-                .catch(error => {
-                    return res
-                        .status(404)
-                        .json({ error, message: 'Poll not updated!' });
-                });
+        PollGroup
+            .save()
+            .then(() => {
+                return res
+                    .status(200)
+                    .json({ success: true, id: Poll._id, message: 'Poll updated!' });
+            })
+            .catch(error => {
+                return res
+                    .status(404)
+                    .json({ error, message: 'Poll not updated!' });
+            });
     });
 }
 
 
 //============================================================================
 // get a collection of all polls
-/// router.get('/polls', ctrl.getPolls);
+// router.get('/polls', ctrl.getPolls);
 const getPolls = async (req, res) => {
 
     await PollGroup.find({}, (err, Polls) => {
