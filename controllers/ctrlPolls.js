@@ -293,7 +293,7 @@ const updateResults = async (req, res) => {
     //         .json({ success: false, error: 'You must provide a body to update' });
     // }
 
-    await PollGroup.findOne({ "Polls.id": req.params.id }, (err, PollGroup) => {
+    await PollGroup.findOne({ "?id": req.params.id }, (err, PollCollection) => {
 
         if (err) {
             return res
@@ -302,9 +302,9 @@ const updateResults = async (req, res) => {
         }
 
         // set the answer
-        PollGroup.Polls[req.params.idx].AnswerCount++;
+        PollCollection.Polls[req.params.idx].AnswerCount++;
 
-        PollGroup
+        PollCollection
             .save()
             .then(() => {
                 return res
