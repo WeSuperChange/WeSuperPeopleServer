@@ -309,7 +309,7 @@ const updateResults = async (req, res) => {
             .then(() => {
                 return res
                     .status(200)
-                    .json({ success: true, id: Poll._id, message: 'Poll updated!' });
+                    .json({ success: true, id: PollCollection._id, message: 'Poll updated!' });
             })
             .catch(error => {
                 return res
