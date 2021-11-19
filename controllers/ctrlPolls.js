@@ -293,7 +293,7 @@ const updateResults = async (req, res) => {
     //         .json({ success: false, error: 'You must provide a body to update' });
     // }
 
-    await PollGroup.findOne({ "?id": req.params.id }, (err, PollCollection) => {
+    await PollGroup.findById(req.params.id, (err, PollCollection) => {
 
         if (err) {
             return res
